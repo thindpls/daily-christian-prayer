@@ -1,0 +1,28 @@
+DAILY CHRISTIAN PRAYER — ANALYTICS CONNECTED
+
+Your GoatCounter code is configured: woodcraftspectrum
+Dashboard: https://woodcraftspectrum.goatcounter.com
+
+TO UPDATE YOUR EXISTING GITHUB PAGES SITE
+1. Unzip this package on your computer.
+2. Open https://github.com/thindpls/daily-christian-prayer
+3. Choose Add file > Upload files.
+4. Upload ONLY index.html, analytics.js, and sw.js from inside the unzipped folder.
+   Allow GitHub to replace existing files with the same names.
+5. Commit changes. Do not upload the ZIP itself or change the other files.
+6. Open https://thindpls.github.io/daily-christian-prayer/ while online.
+7. Visit your GoatCounter dashboard after some visits to check page views and events.
+
+MEASUREMENTS
+Standard page views: online site openings.
+prayer-open: prayer displayed after page open or name setup.
+first-prayer-use: first detected prayer use in that browser.
+return-day: prayer displayed on a later date in the same browser.
+home-screen-launch: app opened in standalone mode, not proof of installation.
+paypal-link-click: click on PayPal support link, not confirmed payment.
+
+LIMITATIONS
+There is no reliable exact count of installs or distinct people. Offline opens and
+privacy-blocked tracking may be missing. Names, contact details and payment
+information are not sent to GoatCounter by this integration. Tracking starts
+after the upload is published; past site visits cannot be reconstructed.

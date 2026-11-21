@@ -1,7 +1,7 @@
 // Offline support. Navigate online-first so published fixes reach returning visitors.
 // If offline, fall back to the last saved website files.
-const CACHE='daily-christian-prayer-v3';
-const SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+const CACHE='daily-christian-prayer-v5';
+const SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./analytics.js'];
 self.addEventListener('install',event=>event.waitUntil(
  caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting())
 ));
