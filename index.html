@@ -50,6 +50,15 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #d3ac
 #install-guide ol{padding-left:20px;margin:8px 0}#install-guide li{margin:7px 0}
 .save-panel .save-hint{font-size:12px;color:#52685d;margin-top:9px}
 @media(max-width:480px){main{padding-top:10px}.hero{padding-top:8px}.hero h1{font-size:34px}.panel{padding:22px 20px}.prayer{font-size:19px;line-height:1.7}.save-panel{padding:15px}}
+
+/* Gentle invitation directly beside today's prayer, with accessible tap targets. */
+.share-invitation{background:#f3f7f1;border:1px solid #d3e1d6;border-radius:14px;padding:17px;margin-top:25px}
+.share-invitation h3{font:600 20px Georgia,serif;color:var(--forest);margin:0 0 6px}
+.share-invitation p{font:14px/1.55 system-ui,sans-serif;color:#476052;margin:0 0 10px}
+.share-invitation .buttons{margin-top:12px;gap:9px}
+.share-invitation button{flex:1 1 145px}
+.share-invitation .share-note{font-size:12px;margin-top:10px;margin-bottom:0}
+@media(max-width:480px){.share-invitation{padding:14px}.share-invitation button{flex:1 1 100%}}
 </style></head><body><main><div class="brand">A moment with God, every day</div><header class="hero"><div class="cross" aria-hidden="true">✝</div><h1>Daily Christian Prayer</h1><p class="tag">A quiet moment of faith and encouragement</p></header>
 <div class="date" id="date"></div>
 <section class="onboarding" id="onboarding" aria-labelledby="onboard-heading" hidden>
@@ -61,7 +70,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #d3ac
   <button id="start" type="button">Show my daily prayer</button>
   <p class="small">Your preferences stay on this device. No registration or internet connection needed.</p>
 </section>
-<article class="panel" id="daily-card" hidden><p class="greeting" id="greeting"></p><p class="personal-label" id="personal-label"></p><h2 class="prayer-heading">Today's Prayer</h2><div class="prayer" id="prayer"></div><div class="buttons"><button id="share" type="button">Share prayer</button><button id="copy" type="button" class="secondary">Copy prayer</button></div><div id="status" role="status" aria-live="polite"></div><div class="reflection"><p class="eyebrow">Today's reflection</p><h3 class="theme" id="theme"></h3><div class="scripture"><p class="eyebrow">Read in your Bible</p><div id="verse"></div></div></div></article>
+<article class="panel" id="daily-card" hidden><p class="greeting" id="greeting"></p><p class="personal-label" id="personal-label"></p><h2 class="prayer-heading">Today's Prayer</h2><div class="prayer" id="prayer"></div><section class="share-invitation" aria-labelledby="share-heading"><h3 id="share-heading">Share a little encouragement</h3><p>Know someone who could use a prayer today? Send them today’s prayer or invite them to receive their own free daily prayer.</p><div class="buttons"><button id="share" type="button">Share today’s prayer</button><button id="copy" type="button" class="secondary">Copy prayer &amp; link</button><button id="invite" type="button" class="secondary">Invite a friend</button></div><p class="share-note">Your name and personal preferences are never included in shared messages.</p></section><div id="status" role="status" aria-live="polite"></div><div class="reflection"><p class="eyebrow">Today's reflection</p><h3 class="theme" id="theme"></h3><div class="scripture"><p class="eyebrow">Read in your Bible</p><div id="verse"></div></div></div></article>
 <section class="save-panel" aria-labelledby="save-title">
 <h2 id="save-title">Come back to your prayer in one tap</h2>
 <p>You can read your prayer right here. To place a Daily Prayer icon on your phone, use the option below — no app store or separate download needed.</p>
@@ -119,9 +128,44 @@ $('start-over').addEventListener('click',()=>{
  $('first-name').value='';$('first-include').checked=true;$('status').textContent='';
  render();window.scrollTo({top:0,behavior:'smooth'});
 });
-function shareText(){const e=todayEntry();return `Daily Christian Prayer — ${e.theme}\nBible reading: ${e.verse}\n\n${e.prayer}`}
-$('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(shareText());$('status').textContent='Prayer copied.'}catch{window.prompt('Copy this prayer:',shareText())}});
-$('share').addEventListener('click',async()=>{let t=shareText();try{if(navigator.share){await navigator.share({title:'Daily Christian Prayer',text:t})}else if(navigator.clipboard){await navigator.clipboard.writeText(t);$('status').textContent='Prayer copied to share.'}else{window.prompt('Copy this prayer:',t)}}catch(e){if(e.name!=='AbortError')$('status').textContent='Sharing unavailable. Please use Copy prayer.'}});
+// Sharing text is intentionally independent of the user's name and preferences.
+// The plain canonical link works for recipients on iPhone, Android and computers.
+const PRAYER_LINK='https://thindpls.github.io/daily-christian-prayer/';
+function shareText(){
+ const e=todayEntry();
+ return `Daily Christian Prayer — ${e.theme}\nBible reading: ${e.verse}\n\n${e.prayer}\n\nRead your own free daily prayer here:\n${PRAYER_LINK}`;
+}
+function invitationText(){return `I thought you might enjoy this free Daily Christian Prayer. There's a new prayer and Bible reading each day, and you can save it to your phone's Home screen. No account needed.\n\n${PRAYER_LINK}`;}
+function shareEvent(kind){try{window.dispatchEvent(new CustomEvent('prayer-share-intent',{detail:{kind}}))}catch(_){}}
+async function copyText(text){
+ try{
+   if(navigator.clipboard && window.isSecureContext){await navigator.clipboard.writeText(text);return true;}
+ }catch(_){}
+ // Browser clipboard may be unavailable: a selectable prompt still allows copying.
+ window.prompt('Select and copy the message below:',text);
+ return false;
+}
+$('copy').addEventListener('click',async()=>{
+ const copied=await copyText(shareText());
+ $('status').textContent=copied?'Prayer and website link copied. Paste it into a message to share.':'Copy the message above to share.';
+ shareEvent('copy-prayer');
+});
+async function shareMessage(text,kind,successText){
+ try{
+  if(navigator.share){
+    await navigator.share({title:'Daily Christian Prayer',text});
+    $('status').textContent=successText;
+    shareEvent(kind);
+    return;
+  }
+  const copied=await copyText(text);
+  $('status').textContent=copied?'Message copied. Paste it into a text, email or Facebook post.':'Select and copy the message to share.';
+  shareEvent(kind);
+ }catch(e){if(e.name!=='AbortError')$('status').textContent='Unable to open sharing. Please use Copy prayer & link.';}
+}
+$('share').addEventListener('click',()=>shareMessage(shareText(),'share-prayer','Sharing opened — thank you for spreading encouragement.'));
+$('invite').addEventListener('click',()=>shareMessage(invitationText(),'invite-friend','Invitation sharing opened — thank you!'));
+
 render();
 
 // Installation is a user action. iOS uses Safari's Share menu, and other browsers offer a menu option.

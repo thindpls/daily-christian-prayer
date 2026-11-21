@@ -48,6 +48,14 @@
      window.navigator.standalone === true;
   if (standalone) send('home-screen-launch');
 
+  // Record voluntary share actions, never the prayer text or a visitor's name.
+  window.addEventListener('prayer-share-intent', (event) => {
+    const kind = event && event.detail && event.detail.kind;
+    if (kind === 'share-prayer') send('share-prayer');
+    else if (kind === 'copy-prayer') send('copy-prayer-link');
+    else if (kind === 'invite-friend') send('invite-friend');
+  });
+
   const paypal = document.querySelector('a[href*="paypal.com/donate/"]');
   if (paypal) paypal.addEventListener('click', () => send('paypal-link-click'));
 })();
