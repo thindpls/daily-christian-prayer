@@ -194,7 +194,7 @@ $('invite').addEventListener('click',()=>shareMessage(invitationText(),'invite-f
 
 render();
 
-// Installation is a user action. iOS uses Safari's Share menu, and other browsers offer a menu option.
+// Installation is a user action. iPhone and iPad support Chrome Share > Add to Home Screen; Safari also works.
 let installEvent=null;
 window.addEventListener('beforeinstallprompt',ev=>{ev.preventDefault();installEvent=ev;});
 const saveHelp=document.getElementById('install-help');
@@ -203,7 +203,7 @@ function showInstallInstructions(){
  const ua=navigator.userAgent||'';
  const ios=/iPad|iPhone|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
  const android=/Android/i.test(ua);
- const instructions=ios?'<ol><li>Open this prayer page in <strong>Safari</strong>.</li><li>Tap <strong>Share</strong> (square with an arrow).</li><li>Choose <strong>Add to Home Screen</strong>, then tap <strong>Add</strong>.</li></ol>':android?'<ol><li>Open this prayer page in <strong>Chrome</strong> or Samsung Internet.</li><li>Tap the browser <strong>menu (⋮ or ≡)</strong>.</li><li>Choose <strong>Install app</strong> or <strong>Add page to Home screen</strong> and confirm.</li></ol>':'<ol><li>In Chrome, look for <strong>Install</strong> in the address bar or menu. An installed app opens in its own window.</li><li>On Windows, for a normal browser shortcut: right-click your desktop, choose <strong>New → Shortcut</strong>, and paste this address: <strong>https://thindpls.github.io/daily-christian-prayer/</strong></li><li>If Chrome says <strong>Open in app</strong>, it may already be installed. Find Daily Christian Prayer in <strong>chrome://apps</strong> or your Start menu.</li></ol>';
+ const instructions=ios?'<p><strong>iPhone or iPad — Google Chrome (recommended)</strong></p><ol><li>Open <strong>Chrome</strong> and visit this Daily Christian Prayer page.</li><li>Tap <strong>Share</strong> (square with an up arrow, near the address bar).</li><li>Select <strong>Add to Home Screen</strong>, then tap <strong>Add</strong>.</li><li>Look for the <strong>Daily Christian Prayer</strong> icon on your Home screen. Tap it each morning for your free personalized prayer.</li></ol><p><strong>Using Safari instead?</strong> Open this page in Safari, tap Share (or Page Menu, then Share), select Add to Home Screen, and tap Add.</p>':android?'<ol><li>Open this prayer page in <strong>Chrome</strong> or Samsung Internet.</li><li>Tap the browser <strong>menu (⋮ or ≡)</strong>.</li><li>Choose <strong>Install app</strong> or <strong>Add page to Home screen</strong> and confirm.</li></ol>':'<ol><li>In Chrome, look for <strong>Install</strong> in the address bar or menu. An installed app opens in its own window.</li><li>On Windows, for a normal browser shortcut: right-click your desktop, choose <strong>New → Shortcut</strong>, and paste this address: <strong>https://thindpls.github.io/daily-christian-prayer/</strong></li><li>If Chrome says <strong>Open in app</strong>, it may already be installed. Find Daily Christian Prayer in <strong>chrome://apps</strong> or your Start menu.</li></ol>';
  installGuide.innerHTML='<strong>To save this prayer page:</strong>'+instructions+'<p class="save-hint">If you do not see the option, open the page in your regular browser instead of an email or Facebook in-app browser.</p>';
  installGuide.hidden=false;saveHelp.setAttribute('aria-expanded','true');
 }
