@@ -1,5 +1,5 @@
 // Network-first for public pages; cached copies support offline reading.
-const CACHE = 'daily-christian-prayer-v15';
+const CACHE = 'daily-christian-prayer-v16';
 const PAGES = ['./index.html','./christmas-prayers.html','./about.html','./privacy.html','./contact.html'];
 const ASSETS = ['./manifest.webmanifest','./icon-192.png','./icon-512.png','./analytics.js','./offline.html','./404.html','./paypal-qr.png','./og-1200x630.png','./og-christmas.png'];
 const root = new URL('./', self.registration.scope);
