@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://thindpls.github.io/daily-christian-prayer/</loc>
-  </url>
-  <url>
-    <loc>https://thindpls.github.io/daily-christian-prayer/christmas-prayers.html</loc>
-  </url>
+  <url><loc>https://thindpls.github.io/daily-christian-prayer/</loc></url>
+  <url><loc>https://thindpls.github.io/daily-christian-prayer/christmas-prayers.html</loc></url>
+  <url><loc>https://thindpls.github.io/daily-christian-prayer/about.html</loc></url>
+  <url><loc>https://thindpls.github.io/daily-christian-prayer/privacy.html</loc></url>
+  <url><loc>https://thindpls.github.io/daily-christian-prayer/contact.html</loc></url>
 </urlset>
